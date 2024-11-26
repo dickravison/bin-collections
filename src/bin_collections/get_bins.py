@@ -15,7 +15,7 @@ BIN_MAP = {
     "ahtm_dates_blue_pulpable_bin": "Blue bin",
     "ahtm_dates_green_organic_bin": "Green Bin",
 }
-NOTIFICATIONS_ENABLED = os.environ.get('NOTIFICATIONS_ENABLED')
+NOTIFICATIONS_ENABLED = os.environ['NOTIFICATIONS_ENABLED']
 
 sns = boto3.client("sns")
 
@@ -76,7 +76,8 @@ def main(event, context):
     if len(bins) > 0:
         message = "The bins for collection tomorrow are: \n\n" + ','.join(map(str, bins))
         print(message)
-        if NOTIFICATIONS_ENABLED:
+        #Env vars imported from Lambda come in as string rather than bool
+        if NOTIFICATIONS_ENABLED == "true":
             publish(message)
     else:
         print('No bins for collection')
